@@ -1239,7 +1239,7 @@ class UNet2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMixin,
             for down_block_res_sample, down_block_additional_residual in zip(
                 down_block_res_samples, down_block_additional_residuals
             ):
-                down_cross_attn = CrossAttention(down_block_res_sample.size(-1), down_block_additional_residual.size(-1))
+                down_cross_attn = CrossAttention(down_block_res_sample.size(-1))
                 down_cross_attn.to(self.device)
                 down_cross_attn_sample = (down_cross_attn(down_block_res_sample, down_block_additional_residual),)
                 new_down_block_res_samples = new_down_block_res_samples + (down_cross_attn_sample,)
@@ -1269,7 +1269,7 @@ class UNet2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMixin,
                 sample += down_intrablock_additional_residuals.pop(0)
 
         if is_controlnet:
-            mid_cross_attn = CrossAttention(sample.size(-1), mid_block_additional_residual.size(-1))
+            mid_cross_attn = CrossAttention(sample.size(-1))
             mid_cross_attn.to(self.device)
             sample = (mid_cross_attn(sample, mid_block_additional_residual),)
 
