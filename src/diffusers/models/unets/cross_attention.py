@@ -5,6 +5,7 @@ class CrossAttention(nn.Module):
     def __init__(self, embed_dim, num_heads=4, batch_first=True):
         super().__init__()
 
+        self.embed_dim = embed_dim
         self.multihead_attn = nn.MultiheadAttention(
             embed_dim**2, num_heads=num_heads, batch_first=batch_first
         )
