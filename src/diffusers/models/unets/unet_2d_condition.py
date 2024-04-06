@@ -48,6 +48,7 @@ from .unet_2d_blocks import (
     get_mid_block,
     get_up_block,
 )
+from .cross_attention import CrossAttention
 
 
 logger = logging.get_logger(__name__)  # pylint: disable=invalid-name
@@ -1235,7 +1236,9 @@ class UNet2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMixin,
             for down_block_res_sample, down_block_additional_residual in zip(
                 down_block_res_samples, down_block_additional_residuals
             ):
-                down_block_res_sample = down_block_res_sample + down_block_additional_residual
+                cross_attn = CrossAttention(down_block_res_sample.size(-1))
+                cross_attn.to(self.device)
+                down_block_res_sample = cross_attn(down_block_res_sample, down_block_additional_residual)
                 new_down_block_res_samples = new_down_block_res_samples + (down_block_res_sample,)
 
             down_block_res_samples = new_down_block_res_samples
@@ -1263,7 +1266,9 @@ class UNet2DConditionModel(ModelMixin, ConfigMixin, UNet2DConditionLoadersMixin,
                 sample += down_intrablock_additional_residuals.pop(0)
 
         if is_controlnet:
-            sample = sample + mid_block_additional_residual
+            cross_attn = CrossAttention(sample.size(-1))
+            cross_attn.to(self.device)
+            sample = cross_attn(sample, mid_block_additional_residual)
 
         # 5. up
         for i, upsample_block in enumerate(self.up_blocks):
