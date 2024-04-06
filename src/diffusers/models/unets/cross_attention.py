@@ -13,4 +13,5 @@ class CrossAttention(nn.Module):
         q = query.flatten(-2, -1)
         kv = key_value.flatten(-2, -1)
         output, _ = self.multihead_attn(q, kv, kv)
-        return output
+        batch_size = q.size(0)
+        return output.view(batch_size, -1, self.embed_dim, self.embed_dim)
