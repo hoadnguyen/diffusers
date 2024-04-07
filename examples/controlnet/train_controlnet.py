@@ -838,7 +838,7 @@ def make_train_dataset(args, tokenizer, accelerator):
         init_images = [image_transforms(image) for image in init_images]
 
         masks = [mask.convert("L") for mask in examples[mask_image_column]]
-        masks = [mask_transforms(mask).unsqueeze(0).unsqueeze(0) for mask in masks]
+        masks = [mask_transforms(mask).unsqueeze(0) for mask in masks]
         masks[masks < 0.5] = 0
         masks[masks >= 0.5] = 1
 
