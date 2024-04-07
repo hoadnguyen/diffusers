@@ -839,8 +839,6 @@ def make_train_dataset(args, tokenizer, accelerator):
 
         masks = [mask.convert("L") for mask in examples[mask_image_column]]
         masks = [mask_transforms(mask).unsqueeze(0) for mask in masks]
-        masks[masks < 0.5] = 0
-        masks[masks >= 0.5] = 1
 
         examples["pixel_values"] = images
         examples["conditioning_pixel_values"] = conditioning_images
@@ -882,6 +880,8 @@ def collate_fn(examples):
     ).float()
 
     masks = torch.stack([example["mask"] for example in examples])
+    masks[masks < 0.5] = 0
+    masks[masks >= 0.5] = 1
     masks = masks.to(memory_format=torch.contiguous_format).float()
 
     input_ids = torch.stack([example["input_ids"] for example in examples])
