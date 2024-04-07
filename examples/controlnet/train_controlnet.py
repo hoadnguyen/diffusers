@@ -1244,7 +1244,7 @@ def main(args):
                 ).latent_dist.sample()
                 init_latents = init_latents * vae.config.scaling_factor
 
-                masks = batch["masks"]
+                masks = batch["mask"]
                 # resize the mask to latents shape as we concatenate the mask to the latents
                 mask = torch.stack(
                     [
