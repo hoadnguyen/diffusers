@@ -1514,8 +1514,11 @@ class StableDiffusionControlNetInpaintPipelineV2(
                         controlnet_cond_scale = controlnet_cond_scale[0]
                     cond_scale = controlnet_cond_scale * controlnet_keep[i]
 
+                if num_channels_unet == 9:
+                    latent_model_input = torch.cat([latent_model_input, mask, masked_image_latents], dim=1)
+                    
                 down_block_res_samples, mid_block_res_sample = self.controlnet(
-                    control_model_input,
+                    latent_model_input,
                     t,
                     encoder_hidden_states=controlnet_prompt_embeds,
                     controlnet_cond=control_image,
@@ -1532,9 +1535,6 @@ class StableDiffusionControlNetInpaintPipelineV2(
                     mid_block_res_sample = torch.cat([torch.zeros_like(mid_block_res_sample), mid_block_res_sample])
 
                 # predict the noise residual
-                if num_channels_unet == 9:
-                    latent_model_input = torch.cat([latent_model_input, mask, masked_image_latents], dim=1)
-
                 noise_pred = self.unet(
                     latent_model_input,
                     t,

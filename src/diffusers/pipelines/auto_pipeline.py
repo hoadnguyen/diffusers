@@ -21,6 +21,7 @@ from ..configuration_utils import ConfigMixin
 from .controlnet import (
     StableDiffusionControlNetImg2ImgPipeline,
     StableDiffusionControlNetInpaintPipeline,
+    StableDiffusionControlNetInpaintPipelineV2,
     StableDiffusionControlNetPipeline,
     StableDiffusionXLControlNetImg2ImgPipeline,
     StableDiffusionXLControlNetInpaintPipeline,
@@ -99,6 +100,7 @@ AUTO_INPAINT_PIPELINES_MAPPING = OrderedDict(
         ("kandinsky", KandinskyInpaintCombinedPipeline),
         ("kandinsky22", KandinskyV22InpaintCombinedPipeline),
         ("stable-diffusion-controlnet", StableDiffusionControlNetInpaintPipeline),
+        ("stable-diffusion-controlnet-v2", StableDiffusionControlNetInpaintPipelineV2),
         ("stable-diffusion-xl-controlnet", StableDiffusionXLControlNetInpaintPipeline),
     ]
 )
