@@ -1287,7 +1287,7 @@ def main(args):
                 )
 
                 down_block_res_samples, mid_block_res_sample = controlnet(
-                    latent_model_input,
+                    noisy_latents,
                     timesteps,
                     encoder_hidden_states=encoder_hidden_states,
                     controlnet_cond=controlnet_image,
